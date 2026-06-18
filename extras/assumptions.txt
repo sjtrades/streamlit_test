@@ -1,0 +1,74 @@
+
+## Assumptions
+
+### Timestamps
+
+The dataset README specifies that the `ts` column represents milliseconds elapsed within a match.
+
+While loading parquet files, pandas automatically converts these values into `datetime64[ns]`. For playback implementation, the original millisecond values are reconstructed to preserve the temporal ordering of events.
+
+Movement trajectories and discrete events are progressively revealed based on their relative timestamp within the selected match.
+
+### Heatmaps
+
+Heatmaps are generated at the map level by aggregating telemetry data from all matches played on the selected map.
+
+This provides a better overview of:
+
+- High traffic routes
+- Frequently contested combat areas
+- Common player death locations
+
+### Storm Events
+
+The application supports storm death events (`KilledByStorm`). The provided dataset contains a limited number of storm-related events, therefore storm-related markers and statistics may not be visible for every selected match.
+
+### Coordinate Mapping
+
+The provided world-to-minimap transformation configuration was used to convert 3D world coordinates into 2D minimap coordinates.
+
+Only `x` and `z` coordinates are used for minimap visualization, while the `y` coordinate represents elevation and is ignored for 2D plotting.
+
+---
+
+
+
+
+#############################################################################
+#############################################################################
+#############################################################################
+
+
+# LILA BLACK - Architecture
+
+# Minimap Asset Observations
+The provided minimap assets were not fully consistent:
+
+- AmbroseValley_Minimap.png
+- GrandRift_Minimap.png
+- Lockdown_Minimap.jpg
+
+Additionally, the README specified minimaps as 1024×1024, while the supplied assets were exported at a higher resolution (4320×4320).
+
+To make the coordinate mapping robust against future asset re-exports and differing image formats, the implementation converts world coordinates to normalized UV coordinates and then scales them using the actual image dimensions loaded at runtime rather than relying on a hardcoded resolution.
+
+
+# Data Validation
+Before implementing the visualization layer, a validation utility was created to overlay all movement events on top of the minimap. This was used to verify that player traffic aligned with roads, buildings, and traversable areas, confirming the correctness of the world-to-minimap coordinate conversion.
+
+
+### ToDo
+
+-README says 1024×1024, actual images are 4320×4320.
+-Two minimaps are PNG, one is JPG.
+-Coordinate mapping uses actual image dimensions.
+-Validation script created before UI implementation.
+-Event column stored as bytes and requires decoding.
+-Human vs Bot detection derived from user_id format (UUID vs numeric).
+-Match reconstruction performed by grouping files on match_id.
+-Playback implemented by sorting events on ts.
+
+
+
+
+#############################################################################
