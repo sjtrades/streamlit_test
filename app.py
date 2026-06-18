@@ -11,7 +11,8 @@ st.set_page_config(page_title="LILA BLACK - Player Journey Viewer", layout="wide
 # st.title("LILA BLACK - Player Journey Viewer")
 
 st.write("Version", st.__version__)
-st.write("Has rerun", hasattr(st, "experimental_rerun"))
+st.write("Has rerun", hasattr(st, "rerun"))
+st.write("Has experimental_rerun", hasattr(st, "experimental_rerun"))
 
 @st.cache_data
 def load_dataset():
@@ -204,26 +205,30 @@ with right_panel:
             with c1:
                 if st.button("⏮", use_container_width=True):
                     st.session_state.playback_pct = 0
-                    st.experimental_rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             with c2:
                 if st.button("◀", use_container_width=True):
                     st.session_state.playback_pct = max(
                         0, st.session_state.playback_pct - 1
                     )
-                    st.experimental_rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             with c3:
                 if st.button("▶", use_container_width=True):
                     st.session_state.playback_pct = min(
                         100, st.session_state.playback_pct + 1
                     )
-                    st.experimental_rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             with c4:
                 if st.button("⏭", use_container_width=True):
                     st.session_state.playback_pct = 100
-                    st.experimental_rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             st.markdown("---")
             st.subheader("Match Stats")
