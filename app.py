@@ -10,6 +10,8 @@ from config import MAP_CONFIG, HEATMAP_CONFIG
 st.set_page_config(page_title="LILA BLACK - Player Journey Viewer", layout="wide")
 # st.title("LILA BLACK - Player Journey Viewer")
 
+st.write("Streamlit version:", st.__version__)
+
 
 @st.cache_data
 def load_dataset():
