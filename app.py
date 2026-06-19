@@ -187,7 +187,8 @@ with right_panel:
             playback_pct = st.session_state.get("playback_pct", 100)
 
             st.markdown("---")
-            st.subheader(f"Playback ({playback_pct}%)")
+            # st.subheader(f"Playback ({playback_pct}%)")
+            st.subheader(f"Playback")
 
             playback_pct = st.slider(
                 "Playback Progress",
