@@ -360,7 +360,7 @@ with center_panel:
 
         elif view_mode == "Journey":
             st.markdown(
-                f"<h3 style='text-align:center;'>Match Id : {selected_match[:-9]}</h3>",
+                f"<h3 style='text-align:center;'>{selected_label[:-10]} | {selected_match[:-9]}</h3>",
                 unsafe_allow_html=True,
             )
 
