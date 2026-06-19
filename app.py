@@ -14,6 +14,8 @@ st.set_page_config(page_title="LILA BLACK - Player Journey Viewer", layout="wide
 # st.write("Has rerun", hasattr(st, "rerun"))
 # st.write("Has experimental_rerun", hasattr(st, "experimental_rerun"))
 
+sl_version = st.__version__
+
 
 @st.cache_data
 def load_dataset():
@@ -54,12 +56,6 @@ def create_base_figure(map_id):
 
 
 df = load_dataset()
-
-# storm_events = df[df["event"].str.contains("storm", case=False, na=False)]
-# st.write("Storm events:", len(storm_events))
-# if len(storm_events):
-#     st.write(storm_events["event"].value_counts())
-
 
 if "mode" not in st.session_state:
     st.session_state["mode"] = "Journey"
@@ -136,8 +132,6 @@ with left_panel:
 
     match_df = map_df[map_df["match_id"] == selected_match].copy()
 
-    # st.write(match_df["event"].value_counts())
-
     selection_key = (selected_date, selected_map, selected_match)
 
     if selection_key != st.session_state.get("selection_key"):
@@ -212,8 +206,7 @@ with right_panel:
                 if st.button("⏮", use_container_width=True):
                     st.session_state.playback_pct = 0
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    # st.experimental_rerun()
-                    st.rerun()
+                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
 
             with c2:
                 if st.button("◀", use_container_width=True):
@@ -221,8 +214,7 @@ with right_panel:
                         0, st.session_state.playback_pct - 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    # st.experimental_rerun()
-                    st.rerun()
+                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
 
             with c3:
                 if st.button("▶", use_container_width=True):
@@ -230,15 +222,13 @@ with right_panel:
                         100, st.session_state.playback_pct + 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    # st.experimental_rerun()
-                    st.rerun()
+                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
 
             with c4:
                 if st.button("⏭", use_container_width=True):
                     st.session_state.playback_pct = 100
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    # st.experimental_rerun()
-                    st.rerun()
+                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
 
             st.markdown("---")
             st.subheader("Match Stats")
@@ -279,25 +269,7 @@ with center_panel:
 
         movement_events = ["Position", "BotPosition"]
         movement_df = match_df[match_df["event"].isin(movement_events)]
-
-        # st.write("Movement rows", len(movement_df))
-        # st.write("Unique ts", movement_df["ts"].nunique())
-        # st.write(movement_df["ts"].sort_values().head(10))
-        # st.write(movement_df["ts"].sort_values().tail(10))
-        # st.write(movement_df["ts"].astype("int64").head())
-
-        # raw_ts = movement_df["ts"].astype("int64")
-
-        # st.write("Min", raw_ts.min())
-        # st.write("Max", raw_ts.max())
-        # st.write("Duration ns", raw_ts.max() - raw_ts.min())
-        # st.write("Duration sec", (raw_ts.max() - raw_ts.min()) / 1e9)
-
-        # ts_ms = movement_df["ts"].astype("int64") // 1_000_000
-        # st.write("Min ms", ts_ms.min())
-        # st.write("Max ms", ts_ms.max())
-        # st.write("Duration ms", ts_ms.max() - ts_ms.min())
-
+        
         selected_player = st.session_state["selected_player"]
         if selected_player != "All":
             movement_df = movement_df[
@@ -323,14 +295,10 @@ with center_panel:
 
         playback_df = movement_df[relative_ms <= playback_cutoff]
 
-        # match_duration = max_ts - min_ts
-        # match_duration_seconds = match_duration.total_seconds()
-        # st.write(movement_df["ts"].dtype)
-        # st.write("Min", min_ts)
-        # st.write("Max", max_ts)
-        # st.write("Duration", match_duration)
-        # st.write("Seconds", match_duration_seconds)
-        # st.write(movement_df["ts"].head())
+        st.write("Playback %", playback_pct)
+        st.write("Playback cutoff", playback_cutoff)
+        st.write("Movement rows", len(movement_df))
+        st.write("Playback rows", len(playback_df))
 
         heatmap_type = st.session_state["heatmap_type"]
 
