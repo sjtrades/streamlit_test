@@ -8,16 +8,14 @@ This document describes the architecture and implementation decisions behind the
 
 ## Technology Choices
 
-|------------|--------------------------------------------------|
-| Technology | Reason                                           |
-|------------|--------------------------------------------------|
-| Python     | Data processing and analysis                     |
-| Streamlit  | Rapid development of interactive dashboards      |
-| Pandas     | Filtering and manipulation of data               |
-| Plotly     | Interactive journey and heatmap visualizations   |
-| PyArrow    | Efficient reading of parquet files               |
-| Pillow     | Loading minimap images                           |
-|------------|--------------------------------------------------|
+| Technology | Reason |
+|------------|--------|
+| Python | Data processing and analysis |
+| Streamlit | Rapid development of interactive dashboards |
+| Pandas | Filtering and manipulation of data |
+| Plotly | Interactive journey and heatmap visualizations |
+| PyArrow | Efficient reading of parquet files |
+| Pillow | Loading minimap images |
 
 ---
 
@@ -25,6 +23,7 @@ This document describes the architecture and implementation decisions behind the
 
 The application follows the pipeline below.
 
+```text
 Parquet Files
     │
 load_all_data()
@@ -40,6 +39,7 @@ Map / Date / Match Filtering
 Journey / Playback / Heatmaps
     │
 Plotly Rendering
+```
 
 At startup, parquet files are loaded and combined into a single Pandas DataFrame.
 Event values stored as bytes are decoded into readable strings.
@@ -59,8 +59,8 @@ v = (z - origin_z) / scale
 
 ### Step 2 : Convert UV coordinates into image pixels
 
-pixel_x = u _ image_width
-pixel_y = (1 - v) _ image_height
+pixel_x = u * image_width
+pixel_y = (1 - v) * image_height
 
 The Y-axis is flipped because image coordinates use a top-left origin.
 
@@ -83,7 +83,9 @@ To make the coordinate mapping robust against future asset re-exports and differ
 
 The dataset documentation specifies that timestamps represent milliseconds elapsed within a match.
 
-While loading parquet files, pandas automatically converts these values into `datetime64[ns]`. For playback implementation, the original millisecond values are reconstructed to preserve the ordering of events.
+While loading parquet files, pandas may represent timestamps as either `datetime64[ns]` or `datetime64[ms]` depending on the execution environment and underlying parquet dependencies.
+
+The playback implementation normalizes both representations back to millisecond precision to ensure consistent timeline reconstruction across local and deployed environments.
 
 ### Heatmaps
 
@@ -105,13 +107,11 @@ The supplied dataset contains only a small number of storm-related events, so th
 
 ## Tradeoffs
 
-|-----------------------|-----------------------------------------------------------------------|
-| Consideration         | Decision                                                              |
-|-----------------------|-----------------------------------------------------------------------|
-| Visualization         | Plotly selected over Matplotlib for interactivity                     |
-| UI Framework          | Streamlit selected for rapid prototyping                              |
-| Heatmaps              | Generated per map instead of per match                                |
-| Playback              | Slider-based playback selected over animation                         |
-| Coordinate Mapping    | Dynamic image dimensions selected over fixed 1024×1024 images         |
-| Data Loading          | Preload all parquet files due to manageable dataset size (~89k rows)  |
-|-----------------------|-----------------------------------------------------------------------|
+| Consideration | Decision |
+|---------------|----------|
+| Visualization | Plotly selected over Matplotlib for interactivity |
+| UI Framework | Streamlit selected for rapid prototyping |
+| Heatmaps | Generated per map instead of per match |
+| Playback | Slider-based playback selected over animation |
+| Coordinate Mapping | Dynamic image dimensions selected over fixed 1024×1024 images |
+| Data Loading | Preload all parquet files due to manageable dataset size (~89k rows) |
