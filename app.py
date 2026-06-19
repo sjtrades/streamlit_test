@@ -14,8 +14,6 @@ st.set_page_config(page_title="LILA BLACK - Player Journey Viewer", layout="wide
 # st.write("Has rerun", hasattr(st, "rerun"))
 # st.write("Has experimental_rerun", hasattr(st, "experimental_rerun"))
 
-sl_version = st.__version__
-
 
 @st.cache_data
 def load_dataset():
@@ -55,6 +53,22 @@ def create_base_figure(map_id):
     return fig
 
 
+def get_timestamp_ms(ts_series):
+    dtype = str(ts_series.dtype)
+
+    if dtype == "datetime64[ns]":
+        return ts_series.astype("int64") // 1_000_000
+
+    return ts_series.astype("int64")
+
+
+def rerun():
+    if hasattr(st, "rerun"):
+        st.rerun()
+    else:
+        st.experimental_rerun()
+
+
 df = load_dataset()
 
 if "mode" not in st.session_state:
@@ -71,9 +85,6 @@ if "playback_pct" not in st.session_state:
 
 if "slider_playback_pct" not in st.session_state:
     st.session_state["slider_playback_pct"] = 100
-
-if "mode" not in st.session_state:
-    st.session_state["mode"] = "Journey"
 
 left_panel, center_panel, right_panel = st.columns([1.2, 4, 1.2])
 
@@ -184,8 +195,8 @@ with right_panel:
             playback_pct = st.session_state.get("playback_pct", 100)
 
             st.markdown("---")
-            # st.subheader(f"Playback ({playback_pct}%)")
-            st.subheader(f"Playback")
+            # st.subheader(f"Playback")
+            st.subheader(f"Playback ({st.session_state.playback_pct}%)")
 
             playback_pct = st.slider(
                 "Playback Progress",
@@ -206,11 +217,7 @@ with right_panel:
                 if st.button("⏮", use_container_width=True):
                     st.session_state.playback_pct = 0
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    (
-                        st.experimental_rerun()
-                        if st.__version__ == "1.20.0"
-                        else st.rerun()
-                    )
+                    (rerun())
 
             with c2:
                 if st.button("◀", use_container_width=True):
@@ -218,11 +225,7 @@ with right_panel:
                         0, st.session_state.playback_pct - 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    (
-                        st.experimental_rerun()
-                        if st.__version__ == "1.20.0"
-                        else st.rerun()
-                    )
+                    (rerun())
 
             with c3:
                 if st.button("▶", use_container_width=True):
@@ -230,21 +233,13 @@ with right_panel:
                         100, st.session_state.playback_pct + 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    (
-                        st.experimental_rerun()
-                        if st.__version__ == "1.20.0"
-                        else st.rerun()
-                    )
+                    (rerun())
 
             with c4:
                 if st.button("⏭", use_container_width=True):
                     st.session_state.playback_pct = 100
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    (
-                        st.experimental_rerun()
-                        if st.__version__ == "1.20.0"
-                        else st.rerun()
-                    )
+                    (rerun())
 
             st.markdown("---")
             st.subheader("Match Stats")
@@ -286,9 +281,6 @@ with center_panel:
         movement_events = ["Position", "BotPosition"]
         movement_df = match_df[match_df["event"].isin(movement_events)]
 
-        ts_scale = 1_000_000 if str(movement_df["ts"].dtype) == "datetime64[ns]" else 1
-        ts_ms = movement_df["ts"].astype("int64") // ts_scale
-
         selected_player = st.session_state["selected_player"]
         if selected_player != "All":
             movement_df = movement_df[
@@ -301,8 +293,7 @@ with center_panel:
         if not show_bots:
             movement_df = movement_df[~movement_df["is_bot"]]
 
-        min_ts = movement_df["ts"].min()
-        max_ts = movement_df["ts"].max()
+        ts_ms = get_timestamp_ms(movement_df["ts"])
 
         relative_ms = ts_ms - ts_ms.min()
         duration_ms = relative_ms.max()
@@ -452,7 +443,7 @@ with center_panel:
 
             events_df = match_df[match_df["event"].isin(visible_events)].copy()
 
-            events_ts_ms = events_df["ts"].astype("int64") // ts_scale
+            events_ts_ms = get_timestamp_ms(events_df["ts"])
 
             events_relative_ms = events_ts_ms - ts_ms.min()
             events_df = events_df[events_relative_ms <= playback_cutoff]
