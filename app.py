@@ -270,6 +270,9 @@ with center_panel:
         movement_events = ["Position", "BotPosition"]
         movement_df = match_df[match_df["event"].isin(movement_events)]
 
+        ts_scale = 1_000_000 if str(movement_df["ts"].dtype) == "datetime64[ns]" else 1
+        ts_ms = movement_df["ts"].astype("int64") // ts_scale
+
         st.write("ts dtype", movement_df["ts"].dtype)
         st.write("ts unique", movement_df["ts"].nunique())
         st.write("ts head", movement_df["ts"].head().tolist())
@@ -289,8 +292,6 @@ with center_panel:
 
         min_ts = movement_df["ts"].min()
         max_ts = movement_df["ts"].max()
-
-        ts_ms = movement_df["ts"].astype("int64") // 1_000_000
 
         relative_ms = ts_ms - ts_ms.min()
         duration_ms = relative_ms.max()
@@ -445,7 +446,9 @@ with center_panel:
                 )
 
             events_df = match_df[match_df["event"].isin(visible_events)].copy()
-            events_ts_ms = events_df["ts"].astype("int64") // 1_000_000
+            
+            events_ts_ms = events_df["ts"].astype("int64") // ts_scale
+
             events_relative_ms = events_ts_ms - ts_ms.min()
             events_df = events_df[events_relative_ms <= playback_cutoff]
 
