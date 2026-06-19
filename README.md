@@ -6,6 +6,7 @@ This project is an interactive visualization tool developed for exploring player
 
 The application enables designers to:
 
+- Load and parse gameplay telemetry stored in parquet files
 - Inspect player journeys
 - Analyze combat encounters
 - Visualize loot collection
@@ -103,22 +104,24 @@ project/
 
 ### Journey View
 
-![Journey](screenshots/journey_1.png)
-![Journey](screenshots/journey_2.png)
+![Journey 1](screenshots/journey_01.png)
+![Journey 2](screenshots/journey_02.png)
+![Journey 3](screenshots/journey_03.png)
 
 ### Playback View
 
-![Playback](screenshots/playback_1.png)
-![Playback](screenshots/playback_2.png)
-![Playback](screenshots/playback_3.png)
-![Playback](screenshots/playback_4.png)
+![Playback 1](screenshots/playback_01.png)
+![Playback 2](screenshots/playback_02.png)
+![Playback 3](screenshots/playback_03.png)
 
 ### Heatmap View
 
-![Heatmap](screenshots/heatmap_1.png)
-![Heatmap](screenshots/heatmap_2.png)
-![Heatmap](screenshots/heatmap_3.png)
+![Heatmap 1](screenshots/heatmap_01.png)
+![Heatmap 2](screenshots/heatmap_02.png)
+![Heatmap 3](screenshots/heatmap_03.png)
 
 ## Hosted Application:
 
 https://<your-app>.streamlit.app
+
+The application is publicly accessible via the link above and requires no local setup.
