@@ -10,9 +10,10 @@ from config import MAP_CONFIG, HEATMAP_CONFIG
 st.set_page_config(page_title="LILA BLACK - Player Journey Viewer", layout="wide")
 # st.title("LILA BLACK - Player Journey Viewer")
 
-st.write("Version", st.__version__)
-st.write("Has rerun", hasattr(st, "rerun"))
-st.write("Has experimental_rerun", hasattr(st, "experimental_rerun"))
+# st.write("Version", st.__version__)
+# st.write("Has rerun", hasattr(st, "rerun"))
+# st.write("Has experimental_rerun", hasattr(st, "experimental_rerun"))
+
 
 @st.cache_data
 def load_dataset():
@@ -194,7 +195,6 @@ with right_panel:
                 max_value=100,
                 value=st.session_state.playback_pct,
                 step=1,
-                key="slider_playback_pct",
                 label_visibility="collapsed",
             )
 
