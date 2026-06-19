@@ -212,8 +212,8 @@ with right_panel:
                 if st.button("⏮", use_container_width=True):
                     st.session_state.playback_pct = 0
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun()
-                    # st.rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             with c2:
                 if st.button("◀", use_container_width=True):
@@ -221,8 +221,8 @@ with right_panel:
                         0, st.session_state.playback_pct - 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun()
-                    # st.rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             with c3:
                 if st.button("▶", use_container_width=True):
@@ -230,15 +230,15 @@ with right_panel:
                         100, st.session_state.playback_pct + 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun()
-                    # st.rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             with c4:
                 if st.button("⏭", use_container_width=True):
                     st.session_state.playback_pct = 100
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun()
-                    # st.rerun()
+                    # st.experimental_rerun()
+                    st.rerun()
 
             st.markdown("---")
             st.subheader("Match Stats")
