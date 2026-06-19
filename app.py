@@ -269,7 +269,12 @@ with center_panel:
 
         movement_events = ["Position", "BotPosition"]
         movement_df = match_df[match_df["event"].isin(movement_events)]
-        
+
+        st.write("ts dtype", movement_df["ts"].dtype)
+        st.write("ts unique", movement_df["ts"].nunique())
+        st.write("ts head", movement_df["ts"].head().tolist())
+        st.write("int64 head", movement_df["ts"].astype("int64").head().tolist())
+
         selected_player = st.session_state["selected_player"]
         if selected_player != "All":
             movement_df = movement_df[
@@ -290,15 +295,16 @@ with center_panel:
         relative_ms = ts_ms - ts_ms.min()
         duration_ms = relative_ms.max()
 
+        st.write("ts_ms head", ts_ms.head().tolist())
+        st.write("ts_ms unique", ts_ms.nunique())
+        st.write("Min ts_ms", ts_ms.min())
+        st.write("Max ts_ms", ts_ms.max())
+        st.write("Duration ms", duration_ms)
+
         playback_pct = st.session_state["playback_pct"]
         playback_cutoff = duration_ms * playback_pct / 100
 
         playback_df = movement_df[relative_ms <= playback_cutoff]
-
-        st.write("Playback %", playback_pct)
-        st.write("Playback cutoff", playback_cutoff)
-        st.write("Movement rows", len(movement_df))
-        st.write("Playback rows", len(playback_df))
 
         heatmap_type = st.session_state["heatmap_type"]
 
