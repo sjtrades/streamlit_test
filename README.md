@@ -4,14 +4,14 @@
 
 This project is an interactive visualization tool developed for exploring player telemetry data from LILA BLACK.
 
-The application enables designers to:
+The application enables designers and analysts to:
 
 - Load and parse gameplay telemetry stored in parquet files
 - Inspect player journeys
 - Analyze combat encounters
 - Visualize loot collection
 - Reconstruct match timelines
-- Identify traffic hotspots
+- Identify high traffic areas
 - Explore aggregated heatmaps
 
 ---
@@ -85,18 +85,21 @@ Journey mode also supports:
 
 ## Project Structure
 
+```
 project/
-│── app.py # Main Streamlit application
-│── loader.py # Load and preprocess parquet data
-│── config.py # Map and heatmap configuration
-│── coordinate_mapper.py # World to minimap coordinate conversion
-│── map_utils.py # Visualization helper functions
+│── app.py                  # Main Streamlit application
+│── loader.py               # Load and preprocess parquet data
+│── config.py               # Map and heatmap configuration
+│── coordinate_mapper.py    # World to minimap coordinate conversion
+│── map_utils.py            # Visualization helper functions
 │── requirements.txt
 │── README.md
 │── ARCHITECTURE.md
 
-├── minimaps/ # Minimap images
-├── player_data/ # Gameplay telemetry parquet files
+├── minimaps/               # Minimap images
+├── player_data/            # Gameplay telemetry parquet files
+├── screenshots/            # README screenshots
+```
 
 ---
 
@@ -122,6 +125,6 @@ project/
 
 ## Hosted Application:
 
-https://<your-app>.streamlit.app
+https://sj-sltest.streamlit.app
 
 The application is publicly accessible via the link above and requires no local setup.
