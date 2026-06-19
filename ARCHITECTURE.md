@@ -55,11 +55,13 @@ The dataset provides 3d world positions, for minimap visualization (2d), only `x
 ### Step 1 : Convert world coordinates into UV space
 
 u = (x - origin_x) / scale
+
 v = (z - origin_z) / scale
 
 ### Step 2 : Convert UV coordinates into image pixels
 
 pixel_x = u * image_width
+
 pixel_y = (1 - v) * image_height
 
 The Y-axis is flipped because image coordinates use a top-left origin.
@@ -83,7 +85,7 @@ To make the coordinate mapping robust against future asset re-exports and differ
 
 The dataset documentation specifies that timestamps represent milliseconds elapsed within a match.
 
-While loading parquet files, pandas may represent timestamps as either `datetime64[ns]` or `datetime64[ms]` depending on the execution environment and underlying parquet dependencies.
+While loading parquet files, pandas may represent timestamps as either `datetime64[ns]` or `datetime64[ms]` depending on the execution environment and underlying parquet dependencies. For eg. during development, timestamps were observed to be loaded as datetime64[ns] locally and datetime64[ms] on Streamlit Cloud.
 
 The playback implementation normalizes both representations back to millisecond precision to ensure consistent timeline reconstruction across local and deployed environments.
 

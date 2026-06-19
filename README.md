@@ -85,7 +85,7 @@ Journey mode also supports:
 
 ## Project Structure
 
-```
+```text
 project/
 │── app.py                  # Main Streamlit application
 │── loader.py               # Load and preprocess parquet data
@@ -125,6 +125,6 @@ project/
 
 ## Hosted Application:
 
-https://sj-sltest.streamlit.app
+https://sj-lilaplayerjourney.streamlit.app
 
 The application is publicly accessible via the link above and requires no local setup.
