@@ -206,7 +206,11 @@ with right_panel:
                 if st.button("⏮", use_container_width=True):
                     st.session_state.playback_pct = 0
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
+                    (
+                        st.experimental_rerun()
+                        if st.__version__ == "1.20.0"
+                        else st.rerun()
+                    )
 
             with c2:
                 if st.button("◀", use_container_width=True):
@@ -214,7 +218,11 @@ with right_panel:
                         0, st.session_state.playback_pct - 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
+                    (
+                        st.experimental_rerun()
+                        if st.__version__ == "1.20.0"
+                        else st.rerun()
+                    )
 
             with c3:
                 if st.button("▶", use_container_width=True):
@@ -222,13 +230,21 @@ with right_panel:
                         100, st.session_state.playback_pct + 1
                     )
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
+                    (
+                        st.experimental_rerun()
+                        if st.__version__ == "1.20.0"
+                        else st.rerun()
+                    )
 
             with c4:
                 if st.button("⏭", use_container_width=True):
                     st.session_state.playback_pct = 100
                     st.session_state.slider_playback_pct = st.session_state.playback_pct
-                    st.experimental_rerun() if st.__version__ == "1.20.0" else st.rerun()
+                    (
+                        st.experimental_rerun()
+                        if st.__version__ == "1.20.0"
+                        else st.rerun()
+                    )
 
             st.markdown("---")
             st.subheader("Match Stats")
@@ -273,11 +289,6 @@ with center_panel:
         ts_scale = 1_000_000 if str(movement_df["ts"].dtype) == "datetime64[ns]" else 1
         ts_ms = movement_df["ts"].astype("int64") // ts_scale
 
-        st.write("ts dtype", movement_df["ts"].dtype)
-        st.write("ts unique", movement_df["ts"].nunique())
-        st.write("ts head", movement_df["ts"].head().tolist())
-        st.write("int64 head", movement_df["ts"].astype("int64").head().tolist())
-
         selected_player = st.session_state["selected_player"]
         if selected_player != "All":
             movement_df = movement_df[
@@ -295,12 +306,6 @@ with center_panel:
 
         relative_ms = ts_ms - ts_ms.min()
         duration_ms = relative_ms.max()
-
-        st.write("ts_ms head", ts_ms.head().tolist())
-        st.write("ts_ms unique", ts_ms.nunique())
-        st.write("Min ts_ms", ts_ms.min())
-        st.write("Max ts_ms", ts_ms.max())
-        st.write("Duration ms", duration_ms)
 
         playback_pct = st.session_state["playback_pct"]
         playback_cutoff = duration_ms * playback_pct / 100
@@ -446,7 +451,7 @@ with center_panel:
                 )
 
             events_df = match_df[match_df["event"].isin(visible_events)].copy()
-            
+
             events_ts_ms = events_df["ts"].astype("int64") // ts_scale
 
             events_relative_ms = events_ts_ms - ts_ms.min()
