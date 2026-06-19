@@ -10,7 +10,7 @@ from config import MAP_CONFIG, HEATMAP_CONFIG
 st.set_page_config(page_title="LILA BLACK - Player Journey Viewer", layout="wide")
 # st.title("LILA BLACK - Player Journey Viewer")
 
-st.write("Version", st.__version__) # Version 1.20.0
+# st.write("Version", st.__version__)
 # st.write("Has rerun", hasattr(st, "rerun"))
 # st.write("Has experimental_rerun", hasattr(st, "experimental_rerun"))
 
@@ -72,6 +72,9 @@ if "heatmap_type" not in st.session_state:
 
 if "playback_pct" not in st.session_state:
     st.session_state["playback_pct"] = 100
+
+if "slider_playback_pct" not in st.session_state:
+    st.session_state["slider_playback_pct"] = 100
 
 if "mode" not in st.session_state:
     st.session_state["mode"] = "Journey"
@@ -194,18 +197,21 @@ with right_panel:
                 "Playback Progress",
                 min_value=0,
                 max_value=100,
-                value=st.session_state.playback_pct,
+                value=st.session_state.slider_playback_pct,
                 step=1,
                 label_visibility="collapsed",
             )
 
-            st.session_state.playback_pct = playback_pct
+            if playback_pct != st.session_state.playback_pct:
+                st.session_state.playback_pct = playback_pct
+                st.session_state.slider_playback_pct = playback_pct
 
             c1, c2, c3, c4 = st.columns(4)
 
             with c1:
                 if st.button("⏮", use_container_width=True):
                     st.session_state.playback_pct = 0
+                    st.session_state.slider_playback_pct = st.session_state.playback_pct
                     st.experimental_rerun()
                     # st.rerun()
 
@@ -214,6 +220,7 @@ with right_panel:
                     st.session_state.playback_pct = max(
                         0, st.session_state.playback_pct - 1
                     )
+                    st.session_state.slider_playback_pct = st.session_state.playback_pct
                     st.experimental_rerun()
                     # st.rerun()
 
@@ -222,12 +229,14 @@ with right_panel:
                     st.session_state.playback_pct = min(
                         100, st.session_state.playback_pct + 1
                     )
+                    st.session_state.slider_playback_pct = st.session_state.playback_pct
                     st.experimental_rerun()
                     # st.rerun()
 
             with c4:
                 if st.button("⏭", use_container_width=True):
                     st.session_state.playback_pct = 100
+                    st.session_state.slider_playback_pct = st.session_state.playback_pct
                     st.experimental_rerun()
                     # st.rerun()
 
